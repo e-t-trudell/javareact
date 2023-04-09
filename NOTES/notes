@@ -1,0 +1,8 @@
+insert data into sql database on start up:
+create schema.sql and data.sql file in src>resources
+in application properties add:
+spring.sql.init.platform=oracle
+spring.sql.init.mode=always
+spring.jpa.hibernate.ddl-auto=update
+run app with mysql workbench open and running
+
