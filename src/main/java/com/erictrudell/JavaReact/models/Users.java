@@ -1,12 +1,17 @@
 package com.erictrudell.JavaReact.models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
@@ -15,6 +20,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.erictrudell.blurbbox.models.Role;
 
 import lombok.Data;
 
@@ -38,16 +45,26 @@ public class Users {
 	@NotEmpty(message="Password is required!")
     @Size(min=8, max=128, message="Incorrect format")
     private String password;
+	
     
     @Transient
     @NotEmpty(message="Confirm Password is required!")
     @Size(min=8, max=128, message="Incorect format")
-    private String confirm;
+    private String passwordConfirmation;
     @Column(updatable=false)
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date createdAt;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date updatedAt;
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "users_roles", 
+        joinColumns = @JoinColumn(name = "user_id"), 
+        inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles;
+    
+    
     @PrePersist
     protected void onCreate(){
         this.createdAt = new Date();
@@ -87,11 +104,18 @@ public class Users {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getConfirm() {
-		return confirm;
+	
+	public List<Role> getRoles() {
+		return roles;
 	}
-	public void setConfirm(String confirm) {
-		this.confirm = confirm;
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+	public String getPasswordConfirmation() {
+		return passwordConfirmation;
+	}
+	public void setPasswordConfirmation(String passwordConfirmation) {
+		this.passwordConfirmation = passwordConfirmation;
 	}
 	public Date getCreatedAt() {
 		return createdAt;

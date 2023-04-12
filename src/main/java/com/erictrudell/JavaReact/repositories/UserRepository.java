@@ -14,7 +14,9 @@ public interface UserRepository extends CrudRepository<Users, Long>, QuerydslPre
 //	find all
 	public List<Users> findAll();
 //	find one
-	public Optional<Users> findByEmail(String email);
+	public Users findByEmail(String email);
+//	find one
+	public Users findByUsername(String username);
 //	create / update one
 	public Users save(String user);
 	
