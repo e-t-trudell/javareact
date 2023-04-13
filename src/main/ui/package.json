@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "babbel": "^0.10.14",
+    "rest": "^2.0.0"
+  }
+}

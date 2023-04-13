@@ -1,76 +1,67 @@
-// import logo from "./logo.svg";
-import React, { Component } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
-import { Header } from "./components/Header";
-import { Users } from "./components/Users";
-import { DisplayBoard } from "./components/DisplayBoard.js";
-import CreateUser from "./components/CreateUser";
-// copy correct relative path here. three folders up one folder in
-// src/main/java/com/erictrudell/JavaReact/services
-import { getAllUsers, createUser } from "./services/UsersService";
 
-class App extends Component {
-  state = {
-    user: {},
-    users: [],
-    numberOfUsers: 0,
-  };
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import './App.css';
+// import React = require('react');
+import client from 'client';
+import Main from './views/Main';
+import ShowOne from './components/ShowOne';
+import Update from './components/Update';
+import UsersList from './components/UsersList';
 
-  createUser = (e) => {
-    createUser(this.state.user).then((response) => {
-      console.log(response);
-      this.setState({ numberOfUsers: this.state.numberOfUsers + 1 });
-    });
-    this.setState({ user: {} });
-  };
 
-  getAllUsers = () => {
-    getAllUsers().then((users) => {
-      console.log(users);
-      this.setState({ users: users, numberOfUsers: users.length });
-    });
-  };
 
-  onChangeForm = (e) => {
-    let user = this.state.user;
-    if (e.target.name === "firstname") {
-      user.firstName = e.target.value;
-    } else if (e.target.name === "lastname") {
-      user.lastName = e.target.value;
-    } else if (e.target.name === "email") {
-      user.email = e.target.value;
-    }
-    this.setState({ user });
-  };
-
-  render() {
-    return (
-      <div className="App">
-        <Header></Header>
-        <div className="container mrgnbtm">
-          <div className="row">
-            <div className="col-md-8">
-              <CreateUser
-                user={this.state.user}
-                onChangeForm={this.onChangeForm}
-                createUser={this.createUser}
-              ></CreateUser>
-            </div>
-            <div className="col-md-4">
-              <DisplayBoard
-                numberOfUsers={this.state.numberOfUsers}
-                getAllUsers={this.getAllUsers}
-              ></DisplayBoard>
-            </div>
-          </div>
-        </div>
-        <div className="row mrgnbtm">
-          <Users users={this.state.users}></Users>
-        </div>
-      </div>
-    );
-  }
+// FUNCTIONAL COMPONENT - accepts props as an argument and returns a react element
+function App () {
+  ReactDom.render(
+    <App />,
+    document.getElementById('react')
+  )
+  return (
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          {/* User form lives in Main */}
+          <Route path='/' default element={<Main/>}/>
+          <Route  path="/api/users/:id" element={<ShowOne/>}/>
+          <Route  path="/api/users" element={<UsersList/>}/>
+          <Route path='/pirates/edit/:id' element={<Update/>} />
+          {/* <Route path='*' element={<PageNotFound />} */}
+           {/* <EmployeeList employees={this.state.employees}/>   */}
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
-
 export default App;
+
+//  CLASS COMPONENT - creates render function to return react element. 
+// class App extends React.Component {
+
+// 	constructor(props) {
+// 		super(props);
+// 		this.state = {users: []};
+// 	}
+
+// 	componentDidMount() {
+// 		client({method: 'GET', path: '/api/users'}).done(response => {
+// 			this.setState({users: response.entity._embedded.users});
+// 		});
+// 	}
+
+// 	render() {
+// 		return (
+//       <div className="App">
+//         <BrowserRouter>
+//           <Routes>
+//            {/* User form lives in Main */}
+//             <Route path='/' default element={<Main/>}/>
+//             <Route  path="/pirates/:id" element={<ShowOne/>}/>
+//             <Route  path="/pirates" element={<UsersList/>}/>
+//             <Route path='/pirates/edit/:id' element={<Update/>} />
+//             {/* <EmployeeList employees={this.state.employees}/>   */}
+//           </Routes>
+//         </BrowserRouter>
+//       </div>
+// 		)
+// 	}
+// }
